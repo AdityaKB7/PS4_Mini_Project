@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Predictor</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 800px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h2 {
+            margin: 0;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+        .input-group i {
+            position: absolute;
+            bottom: 12px;
+            left: 15px;
+            color: var(--text-muted);
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+        #result-container {
+            margin-top: 25px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.2em;
+            display: none;
+        }
+        .placed { background-color: #D1FAE5; color: #065F46; }
+        .not-placed { background-color: #FEE2E2; color: #991B1B; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2><i class="fa-solid fa-graduation-cap"></i> Campus Placement Predictor</h2>
+        <p>Enter student details below to predict placement status.</p>
+    </div>
+
+    <form id="predictionForm">
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Gender</label>
+                <i class="fa-solid fa-venus-mars"></i>
+                <select name="gender" required>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>10th Percentage</label>
+                <i class="fa-solid fa-percent"></i>
+                <input type="number" step="0.01" name="ssc_p" placeholder="e.g., 75.5" required>
+            </div>
+
+            <div class="input-group">
+                <label>10th Board</label>
+                <i class="fa-solid fa-school"></i>
+                <select name="ssc_b" required>
+                    <option value="Central">Central</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>12th Percentage</label>
+                <i class="fa-solid fa-percent"></i>
+                <input type="number" step="0.01" name="hsc_p" placeholder="e.g., 80.2" required>
+            </div>
+
+            <div class="input-group">
+                <label>12th Board</label>
+                <i class="fa-solid fa-school"></i>
+                <select name="hsc_b" required>
+                    <option value="Central">Central</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>12th Stream</label>
+                <i class="fa-solid fa-book"></i>
+                <select name="hsc_s" required>
+                    <option value="Science">Science</option>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Arts">Arts</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Degree Percentage</label>
+                <i class="fa-solid fa-percent"></i>
+                <input type="number" step="0.01" name="degree_p" placeholder="e.g., 68.0" required>
+            </div>
+
+            <div class="input-group">
+                <label>Degree Type</label>
+                <i class="fa-solid fa-user-graduate"></i>
+                <select name="degree_t" required>
+                    <option value="Sci&Tech">Science & Tech</option>
+                    <option value="Comm&Mgmt">Commerce & Mgmt</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Work Experience</label>
+                <i class="fa-solid fa-briefcase"></i>
+                <select name="workex" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Employability Test (%)</label>
+                <i class="fa-solid fa-clipboard-check"></i>
+                <input type="number" step="0.01" name="etest_p" placeholder="e.g., 90.0" required>
+            </div>
+
+            <div class="input-group">
+                <label>MBA Specialization</label>
+                <i class="fa-solid fa-chart-pie"></i>
+                <select name="specialisat" required>
+                    <option value="Mkt&HR">Marketing & HR</option>
+                    <option value="Mkt&Fin">Marketing & Finance</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>MBA Percentage</label>
+                <i class="fa-solid fa-percent"></i>
+                <input type="number" step="0.01" name="mba_p" placeholder="e.g., 65.4" required>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> Predict Placement</button>
+    </form>
+
+    <div id="result-container"></div>
+</div>
+
+<script>
+    document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Gather data from the form
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Convert number strings to actual floats for the backend
+        ['ssc_p', 'hsc_p', 'degree_p', 'etest_p', 'mba_p'].forEach(key => {
+            data[key] = parseFloat(data[key]);
+        });
+
+        // Send data to FastAPI
+        const response = await fetch('/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        // Update the UI dynamically
+        const resultContainer = document.getElementById('result-container');
+        resultContainer.style.display = 'block';
+        
+        if (result.prediction === 1) {
+            resultContainer.className = 'placed';
+            resultContainer.innerHTML = '<i class="fa-solid fa-circle-check"></i> Highly Likely to be Placed';
+        } else {
+            resultContainer.className = 'not-placed';
+            resultContainer.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Unlikely to be Placed';
+        }
+    });
+</script>
+
+</body>
+</html>
