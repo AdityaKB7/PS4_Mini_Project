@@ -2,10 +2,12 @@ const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
 
 async function runTest() {
-    // Set up Chrome to run in "headless" mode (without opening a visible window)
-    // This is required for Jenkins to run it later
     let options = new chrome.Options();
-    options.addArguments('--headless'); 
+    options.addArguments('--headless=new');
+    options.addArguments('--no-sandbox');
+    options.addArguments('--disable-dev-shm-usage');
+    options.addArguments('--disable-gpu');
+    options.addArguments('--window-size=1920,1080');
     
     let driver = await new Builder()
         .forBrowser('chrome')
@@ -38,17 +40,19 @@ async function runTest() {
 
         console.log("Waiting for prediction result...");
         // Wait until the result container is visible
-        let resultContainer = await driver.wait(until.elementLocated(By.id('result-container')), 5000);
-        await driver.wait(until.elementIsVisible(resultContainer), 5000);
+        let resultContainer = await driver.wait(until.elementLocated(By.id('result-container')), 8000);
+        await driver.wait(until.elementIsVisible(resultContainer), 8000);
 
         let resultText = await resultContainer.getText();
         console.log(`\n✅ TEST PASSED! The model predicted: "${resultText}"\n`);
 
     } catch (error) {
         console.error("❌ TEST FAILED:", error);
-        process.exit(1); // Tell Jenkins the test failed
+        process.exit(1);
     } finally {
-        await driver.quit();
+        if (driver) {
+            await driver.quit();
+        }
     }
 }
 
